@@ -3,7 +3,6 @@ import toast from "react-hot-toast";
 import { validateEmail } from "@/libs/validateEmail";
 import { signIn } from "next-auth/react";
 import Loader from "../Common/Loader";
-import { integrations, messages } from "../../../integrations.config";
 import z from "zod";
 
 const MagicLinkSchema = z.object({
@@ -17,16 +16,14 @@ const MagicLink = () => {
   const loginUser = (e: any) => {
     e.preventDefault();
 
-    if (!integrations?.isAuthEnabled) {
-      toast.error(messages.auth);
-      return;
-    }
+    toast.error("Authentication is disabled in this build.");
+    return;
 
     setLoader(true);
 
     const result = MagicLinkSchema.safeParse({ email });
     if (!result.success) {
-      toast.error(result.error.errors[0].message);
+      toast.error(result.error?.errors[0]?.message ?? "Please check the form fields.");
       setLoader(false);
       return;
     }

@@ -9,7 +9,6 @@ import SocialSignup from "../SocialSignup";
 import SwitchOptions from "../SwitchOptions";
 import MagicLink from "../MagicLink";
 import Loader from "@/components/Common/Loader";
-import { integrations, messages } from "../../../../integrations.config";
 import z from "zod";
 
 const RegisterSchema = z.object({
@@ -48,16 +47,14 @@ const Signup = () => {
   const registerUser = async (e: any) => {
     e.preventDefault();
 
-    if (!integrations?.isAuthEnabled) {
-      toast.error(messages.auth);
-      return;
-    }
+    toast.error("Authentication is disabled in this build.");
+    return;
 
     setLoader(true);
 
     const result = RegisterSchema.safeParse({ name, email, password });
     if (!result.success) {
-      toast.error(result.error.errors[0].message);
+      toast.error(result.error?.errors[0]?.message ?? "Please check the form fields.");
       setLoader(false);
       return;
     }

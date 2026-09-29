@@ -1,5 +1,5 @@
 import Breadcrumb from '@/components/Breadcrumb';
-import { getPost, imageBuilder } from '@/sanity/sanity-utils';
+import { getPost, imageBuilder } from '@/data/blog';
 import { PortableText } from '@portabletext/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,10 +13,10 @@ type Props = {
 export async function generateMetadata(props: Props) {
   const params = await props.params;
   const { slug } = params;
-  const post = await getPost(slug);
-  const siteURL = process.env.SITE_URL;
-  const siteName = process.env.SITE_NAME;
-  const authorName = process.env.AUTHOR_NAME;
+  const post = getPost(slug);
+  const siteURL = process.env.SITE_URL || 'https://example.com';
+  const siteName = process.env.SITE_NAME || 'Portfolio';
+  const authorName = process.env.AUTHOR_NAME || 'Author';
 
   if (post) {
     return {
@@ -75,7 +75,20 @@ export async function generateMetadata(props: Props) {
 export default async function BlogDetails(props: Props) {
   const params = await props.params;
   const { slug } = params;
-  const post = await getPost(slug);
+  const post = getPost(slug);
+
+  if (!post) {
+    return (
+      <section className='pt-20 pb-17.5 lg:pt-25 lg:pb-22.5 xl:pb-27.5'>
+        <div className='mx-auto max-w-[1170px] px-4 sm:px-8 xl:px-0'>
+          <Breadcrumb pageTitle='Blog Details' />
+          <div className='mt-8 text-center text-lg text-white'>
+            Blog post not found.
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <>
@@ -163,7 +176,7 @@ export default async function BlogDetails(props: Props) {
             </h1>
 
             <div className='blog-details mb-12'>
-              <PortableText value={post?.body || []} />
+              <PortableText value={((post?.body as any[]) || []) as any} />
             </div>
 
             <SharePost title={post?.title} description={post?.metadata} />

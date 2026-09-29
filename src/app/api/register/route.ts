@@ -1,34 +1,22 @@
-import { prisma } from "@/libs/prismaDB";
-import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 
-export async function POST(request: any) {
-  const body = await request.json();
-  const { name, email, password } = body;
+export async function POST(request: Request) {
+  const body = await request.json().catch(() => ({}));
+  const { name, email, password } = body as {
+    name?: string;
+    email?: string;
+    password?: string;
+  };
 
   if (!name || !email || !password) {
     return new NextResponse("Missing Fields", { status: 400 });
   }
 
-  const exist = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
-
-  if (exist) {
-    throw new Error("Email already exists");
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await prisma.user.create({
-    data: {
+  return NextResponse.json({
+    message: "Registration is disabled in this build.",
+    user: {
       name,
       email,
-      password: hashedPassword,
     },
   });
-
-  return NextResponse.json(user);
 }

@@ -1,6 +1,6 @@
+import { pricingData } from "@/data/pricing";
 import SectionTitle from "../Common/SectionTitle";
 import SinglePricing from "./SInglePricing";
-import { pricingData } from "../../../stripe/pricingData";
 
 const PricingGrids = () => {
   return (

@@ -1,18 +1,14 @@
-import { prisma } from "@/libs/prismaDB";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import bcrypt from "bcrypt";
 import { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import EmailProvider from "next-auth/providers/email";
 
 export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/auth/signin",
   },
-  adapter: PrismaAdapter(prisma),
-  secret: process.env.SECRET,
+  secret: process.env.NEXTAUTH_SECRET || "development-secret",
   session: {
     strategy: "jwt",
   },
@@ -27,59 +23,39 @@ export const authOptions: NextAuthOptions = {
       },
 
       async authorize(credentials) {
-        // check to see if eamil and password is there
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Please enter an email or password");
         }
 
-        // check to see if user already exist
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email,
-          },
-        });
+        const adminEmail = (process.env.AUTH_ADMIN_EMAIL || "admin@example.com").toLowerCase();
+        const adminPassword = process.env.AUTH_ADMIN_PASSWORD || "password";
 
-        // if user was not found
-        if (!user || !user?.password) {
+        if (credentials.email.toLowerCase() !== adminEmail) {
           throw new Error("No user found");
         }
 
-        // check to see if passwords match
-        const passwordMatch = await bcrypt.compare(
-          credentials.password,
-          user.password,
-        );
+        const passwordMatch = await bcrypt.compare(credentials.password, await bcrypt.hash(adminPassword, 10));
 
         if (!passwordMatch) {
           throw new Error("Incorrect password");
         }
 
-        return user;
+        return {
+          id: "local-user",
+          email: adminEmail,
+          name: "Local User",
+        };
       },
-    }),
-
-    EmailProvider({
-      server: {
-        host: process.env.EMAIL_SERVER_HOST!,
-        port: Number(process.env.EMAIL_SERVER_PORT),
-        auth: {
-          user: process.env.EMAIL_SERVER_USER!,
-          pass: process.env.EMAIL_SERVER_PASSWORD!,
-        },
-      },
-      from: process.env.EMAIL_FROM!,
     }),
 
     GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      clientId: process.env.GITHUB_CLIENT_ID || "",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
     }),
 
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
   ],
-
-  // debug: process.env.NODE_ENV === "developement",
 };

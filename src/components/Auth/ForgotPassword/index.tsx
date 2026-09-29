@@ -5,7 +5,6 @@ import { toast } from "react-hot-toast";
 import { validateEmail } from "@/libs/validateEmail";
 import axios from "axios";
 import Loader from "@/components/Common/Loader";
-import { integrations, messages } from "../../../../integrations.config";
 import z from "zod";
 
 const ForgotPasswordSchema = z.object({
@@ -19,14 +18,12 @@ const ForgotPassword = () => {
   const sendEmail = async (e: any) => {
     e.preventDefault();
 
-    if (!integrations?.isAuthEnabled) {
-      toast.error(messages.auth);
-      return;
-    }
+    toast.error("Authentication is disabled in this build.");
+    return;
 
     const result = ForgotPasswordSchema.safeParse({ email });
     if (!result.success) {
-      toast.error(result.error.errors[0].message);
+      toast.error(result.error?.errors[0]?.message ?? "Please check the form fields.");
       return;
     }
 

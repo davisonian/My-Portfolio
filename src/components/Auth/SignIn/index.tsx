@@ -8,7 +8,6 @@ import SocialSignup from "../SocialSignup";
 import SwitchOptions from "../SwitchOptions";
 import MagicLink from "../MagicLink";
 import Loader from "@/components/Common/Loader";
-import { integrations, messages } from "../../../../integrations.config";
 import z from "zod";
 
 const SigninSchema = z.object({
@@ -43,14 +42,12 @@ const Signin = () => {
   const loginUser = async (e: any) => {
     e.preventDefault();
 
-    if (!integrations?.isAuthEnabled) {
-      toast.error(messages.auth);
-      return;
-    }
+    toast.error("Authentication is disabled in this build.");
+    return;
 
     const result = SigninSchema.safeParse({ ...data });
     if (!result.success) {
-      toast.error(result.error.errors[0].message);
+      toast.error(result.error?.errors[0]?.message ?? "Please check the form fields.");
       return;
     }
 

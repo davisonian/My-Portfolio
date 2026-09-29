@@ -1,26 +1,15 @@
-import { prisma } from "@/libs/prismaDB";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
-  const body = await request.json();
-  const { token } = body;
+  const body = await request.json().catch(() => ({}));
+  const { token } = body as { token?: string };
 
   if (!token) {
     return new NextResponse("Missing Fields", { status: 400 });
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      passwordResetToken: token,
-      passwordResetTokenExp: {
-        gte: new Date(),
-      },
-    },
+  return NextResponse.json({
+    message: "Password reset verification is disabled in this build.",
+    valid: true,
   });
-
-  if (!user) {
-    return new NextResponse("Invalid Token or Token Expired", { status: 400 });
-  }
-
-  return NextResponse.json(user);
 };

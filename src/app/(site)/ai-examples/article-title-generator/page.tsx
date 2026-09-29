@@ -6,7 +6,6 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import z from "zod";
-import { integrations, messages } from "../../../../../integrations.config";
 
 const ArticleTitleGeneratorSchema = z.object({
   numberOfWord: z.string(),
@@ -33,14 +32,12 @@ const ArticleTitleGeneratorPage = () => {
     e.preventDefault();
     setGeneratedContent("Loading....");
 
-    if (!integrations?.isOpenAIEnabled) {
-      toast.error(messages.opanAi);
-      return;
-    }
+    toast.error("OpenAI generation is disabled in this build.");
+    return;
 
     const validation = ArticleTitleGeneratorSchema.safeParse(data);
     if (!validation.success) {
-      toast.error(validation.error.errors[0].message);
+      toast.error(validation.error?.errors[0]?.message ?? "Please check the form fields.");
       return;
     }
 

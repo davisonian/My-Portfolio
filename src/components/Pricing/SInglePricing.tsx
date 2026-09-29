@@ -3,18 +3,14 @@
 import axios from "axios";
 import Image from "next/image";
 import OfferItem from "./OfferItem";
-import { integrations, messages } from "../../../integrations.config";
 import toast from "react-hot-toast";
 
 const SinglePricing = ({ price }: any) => {
   // POST request
   const handleSubscription = async (e: any) => {
     e.preventDefault();
-
-    if (!integrations?.isStripeEnabled) {
-      toast.error(messages.stripe);
-      return;
-    }
+    toast.error("Checkout is disabled in this build.");
+    return;
 
     const { data } = await axios.post(
       "/api/payment",

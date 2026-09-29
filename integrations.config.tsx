@@ -1,6 +1,6 @@
 const integrations = {
-  isSanityEnabled: true,
-  isStripeEnabled: true,
+  isSanityEnabled: false,
+  isStripeEnabled: false,
   isOpenAIEnabled: true,
   isMailchimpEnabled: true,
   isAuthEnabled: true,
@@ -9,30 +9,12 @@ const integrations = {
 const messages = {
   sanity: (
     <div style={{ whiteSpace: "pre-wrap" }}>
-      Sanity is not enabled. Follow the{" "}
-      <a
-        href="https://nextjstemplates.com/docs/enableintegration"
-        className="text-primary underline"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        documentation
-      </a>{" "}
-      to enable it.
+      Sanity is disabled for this build.
     </div>
   ),
   stripe: (
     <div style={{ whiteSpace: "pre-wrap" }}>
-      Stripe is not enabled. Follow the{" "}
-      <a
-        href="https://nextjstemplates.com/docs/enableintegration"
-        className="text-primary underline"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        documentation
-      </a>{" "}
-      to enable it.
+      Stripe checkout is disabled for this build.
     </div>
   ),
   opanAi: (
