@@ -64,22 +64,25 @@ export const portfolioData = {
   ],
   projects: [
     {
-      title: "Portfolio & Developer Brand",
+      title: "Furniture Website",
       summary:
-        "A polished, responsive portfolio built with Next.js and a layered storytelling experience to showcase projects, skills, and technical communication.",
-      stack: ["Next.js", "TypeScript", "Tailwind", "GSAP"],
+        "A modern storefront concept focused on clean product presentation, a premium shopping experience, and conversion-oriented browsing.",
+      stack: ["Next.js", "Responsive UI", "E-commerce", "Brand Design"],
+      url: "https://furniturewebsite.vercel.app/",
     },
     {
-      title: "Support Workflow Automation",
+      title: "Barbershop Website",
       summary:
-        "Focused on reducing repetitive service desk work by standardizing device setup flows, troubleshooting steps, and internal process documentation for teams.",
-      stack: ["IT Operations", "Documentation", "Process Design"],
+        "A polished local business website with strong service presentation, compelling calls to action, and a streamlined customer experience.",
+      stack: ["Next.js", "Landing Page", "UX", "Branding"],
+      url: "https://barbershopwebsite-three.vercel.app/",
     },
     {
-      title: "Systems & Imaging Optimization",
+      title: "The Beans Place",
       summary:
-        "Improved efficiency in hardware deployment and device preparation through repeatable setup methods and careful technical troubleshooting.",
-      stack: ["Imaging", "Configuration", "Deployment"],
+        "A warm, approachable café concept designed to spotlight menu items, atmosphere, and an inviting online brand presence.",
+      stack: ["Next.js", "Content Design", "Storytelling", "Cafe Branding"],
+      url: "https://the-beans-place-three.vercel.app/",
     },
   ],
   strengths: [

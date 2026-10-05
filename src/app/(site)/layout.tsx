@@ -6,10 +6,20 @@ import '@/styles/tailwind.css';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import ScrollToTop from '@/components/ScrollToTop';
+import monogramLogo from '@/assets/id_monogram_transparent.svg';
 import { Plus_Jakarta_Sans } from 'next/font/google';
+import type { Metadata } from 'next';
 import NextTopLoader from 'nextjs-toploader';
 import AuthProvider from '../context/AuthContext';
 import ToasterContext from '../context/ToastContext';
+
+export const metadata: Metadata = {
+  icons: {
+    icon: [{ url: monogramLogo.src, type: 'image/svg+xml' }],
+    shortcut: monogramLogo.src,
+    apple: monogramLogo.src,
+  },
+};
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -24,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang='en' className={plusJakarta.className}>
       <body>
-        <div className='isolate'>
+        <div id='top' className='isolate'>
           <NextTopLoader
             color='#8646F4'
             crawlSpeed={300}
